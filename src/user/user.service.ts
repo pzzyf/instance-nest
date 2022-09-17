@@ -9,6 +9,7 @@ export class UserService {
     private userModel: typeof User,
   ) {}
   async create(createUserDto: CreateUserDto) {
+    console.log(111);
     let res = await this.userModel.build({
       ...createUserDto,
     });

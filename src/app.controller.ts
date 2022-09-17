@@ -1,14 +1,26 @@
-import { Controller, Get } from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
 import { AppService } from './app.service';
 import { ApiTags } from '@nestjs/swagger';
+import { AuthService } from './auth/auth.service';
+import { LoginDTO } from './auth/dto/login.dto';
+import { CreateUserDto } from './user/dto/create-user.dto';
 
-@ApiTags('公共接口')
 @Controller('app')
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  constructor(
+    private readonly appService: AppService,
+    private authService: AuthService,
+  ) {}
 
-  @Get()
-  getHello(): string {
-    return this.appService.getHello();
+  @ApiTags('jwt注册')
+  @Post('auth/register')
+  async AuthRegister(@Body() user: CreateUserDto) {
+    return await this.appService.register(user);
+  }
+
+  @ApiTags('jwt登录')
+  @Post('auth/login')
+  async AuthLogin(@Body() loginParams: LoginDTO) {
+    return await this.appService.login(loginParams);
   }
 }
